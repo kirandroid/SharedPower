@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
+import tkinter as tk
+from tkinter import messagebox
 import pickle
 
 
@@ -11,7 +13,9 @@ def Login_UI():
     Label(window, text="Password").grid(row=2, column=0)
 
     UID_Entry = Entry(window)
+    UID_Entry.insert(0, "UserID")
     UID_Entry.grid(row=1, column=1)
+    UID_Entry.bind("<Button-1>", clear_entry)
 
     Pass_Entry = Entry(window, show='*')
     Pass_Entry.grid(row=2, column=1)
@@ -24,6 +28,8 @@ def get_Login_Details():
     for k in Load_Profile().keys():
         if UID_Entry.get() == k:
             if Pass_Entry.get() == Load_Profile().get(k).get("Pass"):
+                g = "Welcome", Load_Profile().get(k).get("Name")
+                messagebox.showinfo("Login Sucessfull!", g)
                 print("Welcome", Load_Profile().get(k).get("Name"))
                 for t in Load_Profile().get(k).get("Hired_Equip").keys():
                     print("List of Hired Tools")
@@ -31,7 +37,7 @@ def get_Login_Details():
                     print(Load_Profile().get(k).get("Hired_Equip").get(t).get("Price"))
                     print(Load_Profile().get(k).get("Hired_Equip").get(t).get("Condition"))
         else:
-            print("Invalid UserID or Password!")
+            messagebox.showerror("Error", "Invalid UserID or Password!")
 
 
 def Save_Profile(val):
@@ -47,11 +53,18 @@ def Load_Profile():
         return k
 
 
+def clear_entry(event):
+    UID_Entry.delete(0, tk.END)
+
+
 window = Tk()
+window.resizable(0,0)
 window.title("Shared Power")
-window.geometry("800x500")
+window.geometry("1020x680")
 window.iconbitmap('fav.ico')
-window.configure(background="white")
+bg_img = PhotoImage(file = "bg.png")
+bg_label = Label(window, image = bg_img)
+bg_label.place(x=0, y=0, relwidth=1, relheight = 1)
 
 banner = PhotoImage(file="banner.png")
 div = Label(window, image=banner)
