@@ -1,1 +1,18 @@
-{"kirandroid": [{"Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473", "DOB": "567345", "CNo": "46567765", "Name": "kiran", "Gender": "male", "UserID": "kirandroid"}], "Testo": [{"Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473", "DOB": "3284712", "CNo": "567834920", "UserID": "Testo", "Gender": "Male", "Name": "Test kun"}]}
+{
+	"kirandroid": [{
+		"Gender": "male",
+		"UserID": "kirandroid",
+		"DOB": "567345",
+		"Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473",
+		"Name": "kiran",
+		"CNo": "46567765"
+	}],
+	"Testo": [{
+		"Gender": "Male",
+		"UserID": "Testo",
+		"DOB": "3284712",
+		"Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473",
+		"Name": "Test kun",
+		"CNo": "567834920"
+	}]
+}
