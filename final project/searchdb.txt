@@ -1,0 +1,75 @@
+{
+			"T1": [{
+				"Name": "knife",
+				"Price": "999",
+				"Condition": "Bad"
+			}],
+			"T2": [{
+				"Name": "Sword",
+				"Price": "2985",
+				"Condition": "Good"
+			}],
+			"T3": [{
+				"Name": "hammer",
+				"Price": "900",
+				"Condition": "Good"
+			}],
+			"T4": [{
+				"Name": "Screw",
+				"Price": "1000",
+				"Condition": "Best"
+			}],
+			"T5": [{
+				"Name": "Hasya",
+				"Price": "50",
+				"Condition": "Worst"
+			}],
+			"T6": [{
+				"Name": "Sword",
+				"Price": "2985",
+				"Condition": "Good"
+			}],
+			"T7": [{
+				"Name": "wrench",
+				"Price": "1356",
+				"Condition": "wared"
+			}],
+			"T8": [{
+				"Name": "shovel",
+				"Price": "1845",
+				"Condition": "working"
+			}],
+			"T9": [{
+				"Name": "wires",
+				"Price": "500",
+				"Condition": "best"
+			}],
+			"T10": [{
+				"Name": "wire cutter",
+				"Price": "5000",
+				"Condition": "best"
+			}],
+			"T11": [{
+				"Name": "axe",
+				"Price": "2500",
+				"Condition": "worn"
+			}],
+			"T12": [{
+				"Name": "wire cutter",
+				"Price": "5000",
+				"Condition": "best"
+			}],
+			"T13": [{
+				"Name": "saw",
+				"Price": "3080",
+				"Condition": "worn"
+			}],
+			"T14": [{
+				"Name": "wire cutter",
+				"Price": "5000",
+				"Condition": "best"
+			}]
+
+
+
+}

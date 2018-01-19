@@ -1,18 +1,1 @@
-{
-	"kirandroid": [{
-		"Gender": "male",
-		"UserID": "kirandroid",
-		"DOB": "567345",
-		"Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473",
-		"Name": "kiran",
-		"CNo": "46567765"
-	}],
-	"Testo": [{
-		"Gender": "Male",
-		"UserID": "Testo",
-		"DOB": "3284712",
-		"Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473",
-		"Name": "Test kun",
-		"CNo": "567834920"
-	}]
-}
+{"": [{"Hired_Tools": {}, "CNo": "", "Own_Tools": {}, "UserID": "", "DOB": "", "Pass": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "Name": ""}], "bhatta": [{"Hired_Tools": {}, "CNo": "849375", "Own_Tools": {}, "UserID": "bhatta", "DOB": "94857", "Pass": "4fdb5f07d147828a22e48741aba0de363ac13826", "Name": "bhagwan", "Gender": "Male"}], "Testo": [{"Hired_Tools": {}, "CNo": "567834920", "Own_Tools": {"weilder": [{"Name": "weilder", "Price": "900", "Condition": "Great"}], "bag": [{"Name": "bag", "Price": "650", "Condition": "good"}]}, "UserID": "Testo", "DOB": "3284712", "Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473", "Name": "Test kun", "Gender": "Male"}], "sfdg": [{"Hired_Tools": {}, "CNo": "dsfg", "Own_Tools": {}, "UserID": "sfdg", "DOB": "sgf", "Pass": "4caa5710805b3f5c5019e5171c72a2a39a9296bf", "Name": "t4ge", "Gender": "sdf"}], "KishPra": [{"Hired_Tools": {}, "CNo": "89345822", "Own_Tools": {}, "UserID": "KishPra", "DOB": "236130", "Pass": "a5cec7af5f7aab769cf0d4aa440e01c7bfc371b2", "Name": "Kishan Pradhan", "Gender": "Male"}], "kirandroid": [{"Hired_Tools": {}, "CNo": "46567765", "Own_Tools": {"T": [{"Name": "knife", "Price": "999", "Condition": "Bad"}], "": [{"Name": "", "Price": "", "Condition": ""}], "T1": [{"Name": "Sword", "Price": "2985", "Condition": "Good"}], "Hasya": [{"Name": "Hasya", "Price": "50", "Condition": "Worst"}], "Screw": [{"Name": "Screw", "Price": "1000", "Condition": "Best"}], "hammer": [{"Name": "hammer", "Price": "900", "Condition": "Good"}], "Ham": [{"Name": "Ham", "Price": "98", "Condition": "Great"}], "Charger": [{"Name": "Charger", "Price": "100", "Condition": "Good"}]}, "UserID": "kirandroid", "DOB": "567345", "Pass": "974e9e2006ec43d25f7e8b16de63505f31e18473", "Name": "kiran", "Gender": "male"}], "paps": [{"Name": "paper", "UserID": "paps", "Pass": "65a7da8f45e5a2f3931f4d650cb1ecb17b805231", "DOB": "43545", "CNo": "4252", "Gender": "Male", "Own_Tools": {}, "Hired_Tools": {}}], "lap": [{"Name": "laptops", "UserID": "lap", "Pass": "129bc2296c8c6ea7f254628b7b128644e5e1fc92", "DOB": "98475", "CNo": "93047", "Gender": "Male", "Own_Tools": {}, "Hired_Tools": {}}], "Rosh": [{"Name": "Rohitey", "UserID": "Rosh", "Pass": "dc12de3051d1087fb4852adbd235e0f2aed7000c", "DOB": "9438575", "CNo": "9485729837", "Own_Tools": {}, "Hired_Tools": {}}], "002": [{"Name": "anup gautam", "UserID": "002", "Pass": "8adb89029e19fc97b8d434cacc549347a87c0d95", "DOB": "20560105", "CNo": "654613132132132", "Own_Tools": {}, "Hired_Tools": {}}]}

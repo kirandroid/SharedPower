@@ -31,10 +31,7 @@ def Register_UI():
         register_password, \
         register_dob, \
         register_citizenshipno, \
-        register_gender, \
-        insertPic_button, \
-        Profile_pic_label, \
-        inserted_pic
+        register_gender
 
     Label(window, text="Name").grid(row=0, column=2)
     register_name = Entry(window)
@@ -71,12 +68,15 @@ def register():
                 "Pass": hashlib.sha1(register_password.get().encode()).hexdigest(),    # The password from the password entry box is encoded with SHA1 in "Pass" value
                 "DOB": register_dob.get(),
                 "CNo": register_citizenshipno.get(),
-                "Gender": register_gender.get()}]
+                "Gender": register_gender.get(),
+                "Own_Tools": {},
+                "Hired_Tools": {}
+                }]
     open_db[register_userid.get()] = profile  # Assigning the userid from entry box as a key
     try:
         json.dump(open_db, open("database.txt",'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
 
-        connect = ftplib.FTP_TLS('files.000webhost.com','sharedpower','8%X*Qbl!jm@cgIoM)J$8')
+        connect = ftplib.FTP_TLS('files.000webhost.com','sharedpower','kiranpradhan')
         ftplib.FTP_TLS.cwd(connect, "public_html") #changes the path to public_html
         file_db = open("database.txt", 'rb')
         connect.storbinary('STOR database.txt', file_db)
@@ -106,9 +106,41 @@ def login():
 
 
 def Home():
+    global search_Entry, Searched_Item_Name, Searched_Item_Price, Searched_Item_Condition
     home_win = Tk()
     profile_button = Button(home_win, text= "Profile", command = Profile)
     profile_button.grid(row = 0, column = 0)
+
+    search_Entry = Entry(home_win)
+    search_Entry.grid(row =1, column = 0)
+
+    Searched_Item_Name = Label(home_win)
+    Searched_Item_Name.grid(row = 2, column = 0)
+
+    Searched_Item_Price = Label(home_win)
+    Searched_Item_Price.grid(row = 2, column = 1)
+
+    Searched_Item_Condition = Label(home_win)
+    Searched_Item_Condition.grid(row = 2, column = 2)
+
+    search_button = Button(home_win, text = "Search", command = search)
+    search_button.grid(row = 1, column = 1)
+
+
+def search():
+    global count
+    open_searchdb = json.load(open("searchdb.txt"))
+    count = 0
+    for k in open_searchdb.keys():
+        if open_searchdb[k][0]["Name"] == search_Entry.get():
+            Searched_Item_Name.config(text=open_searchdb[k][0]["Name"])
+            Searched_Item_Price.config(text=open_searchdb[k][0]["Price"])
+            Searched_Item_Condition.config(text=open_searchdb[k][0]["Condition"])
+            count += 1
+    else:
+            messagebox.showinfo("Search", "Sorry Item not found!")
+
+
 
 def Profile():
     profile_win = Tk()
@@ -139,6 +171,53 @@ def Profile():
     Profile_Gender = Label(profile_win, text=open_db[LoggedIn_user][0]["Gender"])
     Profile_Gender.grid(row=4, column=1)
 
+    Add_Tools_Button = Button(profile_win, text = "Add Tools", command = Add_Tools)
+    Add_Tools_Button.grid(row = 5, column = 1)
+
+def Add_Tools():
+    global Tools_name_entry, Tools_price_entry, Tools_condition_entry
+    Add_Tools_win = Tk()
+    Tools_name = Label(Add_Tools_win, text = "Tool Name")
+    Tools_name.grid(row = 0, column = 0)
+    Tools_name_entry = Entry(Add_Tools_win)
+    Tools_name_entry.grid(row = 0, column = 1)
+
+    Tools_price = Label(Add_Tools_win, text="Tool Price")
+    Tools_price.grid(row=1, column=0)
+    Tools_price_entry = Entry(Add_Tools_win)
+    Tools_price_entry.grid(row=1, column=1)
+
+    Tools_condition = Label(Add_Tools_win, text="Tool Condition")
+    Tools_condition.grid(row=2, column=0)
+    Tools_condition_entry = Entry(Add_Tools_win)
+    Tools_condition_entry.grid(row=2, column=1)
+
+    Tools_Add_Button = Button(Add_Tools_win, text = "Add", command = Add_Tools_db)
+    Tools_Add_Button.grid(row = 3, column = 1)
+
+def Add_Tools_db():
+    open_db = json.load(open("database.txt"))
+    added_tools = [{"Name": Tools_name_entry.get(),
+                    "Price": Tools_price_entry.get(),
+                    "Condition": Tools_condition_entry.get()
+                  }]
+    add_to_logged_user = open_db[LoggedIn_user][0]['Own_Tools']
+
+    add_to_logged_user[Tools_name_entry.get()] = added_tools
+
+    try:
+        json.dump(open_db, open("database.txt",'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
+
+        connect = ftplib.FTP_TLS('files.000webhost.com','sharedpower','8%X*Qbl!jm@cgIoM)J$8')
+        ftplib.FTP_TLS.cwd(connect, "public_html") #changes the path to public_html
+        file_db = open("database.txt", 'rb')
+        connect.storbinary('STOR database.txt', file_db)
+        file_db.close()
+        connect.quit()
+
+        messagebox.showinfo("Add Tools", "Tool Successfully Added!")
+    except:
+        messagebox.showinfo("Add Tools", "Tools Add Failed!")
 
 
 
@@ -152,3 +231,4 @@ Login_UI()
 Register_UI()
 
 window.mainloop()
+
