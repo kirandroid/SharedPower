@@ -2,7 +2,8 @@
 
 from tkinter import *
 from tkinter import ttk
-#from PIL import Image, ImageTk, ImageFilter
+from PIL import Image, ImageTk, ImageFilter
+import datetime
 import tkinter as tk
 from tkinter import messagebox, filedialog
 import json
@@ -25,12 +26,12 @@ class LoginRegister:
     def Login_UI(self):
         global UID_Entry, Pass_Entry
 
-        UID_Entry = Entry(self.window)
+        UID_Entry = Entry(self.window, font=(15))
         UID_Entry.insert(0, "UserID")
         UID_Entry.config(bd=0)
         UID_Entry.place(x=370, y=347, relwidth=0.27, relheight=0.05)
 
-        Pass_Entry = Entry(self.window, show="*")
+        Pass_Entry = Entry(self.window, show="*", font=(15))
         Pass_Entry.insert(0, "Password")
         Pass_Entry.config(bd=0)
         Pass_Entry.place(x=370, y=433, relwidth=0.27, relheight=0.05)
@@ -116,7 +117,6 @@ class LoginRegister:
     def selected_gender(event=None):
         global gender_selected
         gender_selected = gender_value.get()
-        print(gender_selected)
 
     @staticmethod
     def register(event):
@@ -156,7 +156,7 @@ class LoginRegister:
                 messagebox.showinfo("Login", "Login Successful!")
                 LoggedIn_user = open_db[UID_Entry.get()][0]["UserID"]
                 self.window.destroy()
-                Home().HomeScreen()
+                Home()
             else:
                 messagebox.showinfo("Login", "The Password you entered is incorrect!")
         except KeyError:
@@ -182,7 +182,8 @@ class Home:
         # Profile_Button = Button(self.home_win, image=Profile_Button_Img)
         # Profile_Button.config(bd=0)
         # Profile_Button.place(x=40, y=188)
-        # Profile_Button.bind('<Button-1>', Profile)
+        # self.gr = Profile
+        # Profile_Button.bind('<Button-1>', self.gr)
         #
         # Profile_Button.image = Profile_Button_Img
 
@@ -202,13 +203,16 @@ class Home:
 
         Search_Button.image = Search_Button_Img
 
-        Searched_Item_Name = Label(self.home_win)
+        view_all_button = Button(self.home_win, text = "View All Tools", command = self.view_all)
+        view_all_button.place(x = 800, y = 100)
+
+        Searched_Item_Name = Label(self.home_win, font=(15))
         Searched_Item_Name.place(x = 180, y = 350)
 
-        Searched_Item_Price = Label(self.home_win)
+        Searched_Item_Price = Label(self.home_win, font=(15))
         Searched_Item_Price.place(x = 500, y = 350)
 
-        Searched_Item_Condition = Label(self.home_win)
+        Searched_Item_Condition = Label(self.home_win, font=(15))
         Searched_Item_Condition.place(x = 800, y = 350)
 
 
@@ -226,7 +230,81 @@ class Home:
             messagebox.showinfo("Search", "Sorry Item not found!")
         print(count)
 
-class Profile:
+    def view_all(self):
+        global clicked_hire, Hire_Button
+        self.view_all_win = Tk()
+
+        open_searchdb = json.load(open("searchdb.txt"))
+        name = Label(self.view_all_win, text="Name", font=(15), bg="red", foreground="white")
+        name.grid(row=0, column=0)
+        price = Label(self.view_all_win, text="Price", font=(15), bg="blue", foreground="white")
+        price.grid(row=0, column=1)
+        Condition = Label(self.view_all_win, text="Condition", font=(15), bg="green", foreground="white")
+        Condition.grid(row=0, column=2)
+        Availability = Label(self.view_all_win, text="Availability", font=(15), bg="gray", foreground="white")
+        Availability.grid(row=0, column=3)
+        count = 1
+        buttons = []
+        for k in open_searchdb.keys():
+            Searched_Item_Name = Label(self.view_all_win, text=open_searchdb[k][0]["Name"])
+            Searched_Item_Name.grid(row=count, column=0)
+            Searched_Item_Price = Label(self.view_all_win, text=open_searchdb[k][0]["Price"])
+            Searched_Item_Price.grid(row=count, column=1)
+            Searched_Item_Condition = Label(self.view_all_win, text=open_searchdb[k][0]["Condition"])
+            Searched_Item_Condition.grid(row=count, column=2)
+            if open_searchdb[k][0]["Avail"]=="True":
+                Searched_Item_Availability = Label(self.view_all_win, text = "Yes")
+                Searched_Item_Availability.grid(row=count, column=3)
+
+                Hire_Button = Button(self.view_all_win, text="Hire", command =lambda k=k: Home.hire(k))
+                Hire_Button.grid(row=count, column=4)
+            else:
+                Searched_Item_Availability = Label(self.view_all_win, text="No")
+                Searched_Item_Availability.grid(row=count, column=3)
+                Hire_Button = Button(self.view_all_win, text="Hired", bg = "red")
+                Hire_Button.grid(row=count, column=4)
+
+            count += 1
+        self.view_all_win.mainloop()
+
+    def hire(k):
+        now = datetime.datetime.now()
+        open_db = json.load(open("database.txt"))
+        open_searchdb = json.load(open("searchdb.txt"))
+        hired_tools = [{"Name": open_searchdb[k][0]["Name"],
+                        "Price": open_searchdb[k][0]["Price"],
+                        "Condition": open_searchdb[k][0]["Condition"],
+                        "Time": now.strftime("%Y-%m-%d %H:%M")
+                        }]
+        add_to_logged_user = open_db[LoggedIn_user][0]['Hired_Tools']
+
+        add_to_logged_user[k] = hired_tools
+        try:
+            json.dump(open_db, open("database.txt", 'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
+            open_searchdb[k][0]["Avail"] = not open_searchdb[k][0]["Avail"]
+            update_tools = [{"Name": open_searchdb[k][0]["Name"],
+                            "Price": open_searchdb[k][0]["Price"],
+                            "UID": LoggedIn_user,
+                            "Condition": open_searchdb[k][0]["Condition"],
+                            "Avail" : open_searchdb[k][0]["Avail"]
+                            }]
+            open_searchdb[k] = update_tools
+            json.dump(open_searchdb, open("searchdb.txt", 'w'))
+
+            connect = ftplib.FTP_TLS('files.000webhost.com', 'sharedpower', 'kiranpradhan')
+            ftplib.FTP_TLS.cwd(connect, "public_html")  # changes the path to public_html
+            file_db = open("database.txt", 'rb')
+            connect.storbinary('STOR database.txt', file_db)
+            file_db.close()
+            connect.quit()
+
+            messagebox.showinfo("Hire Tools", "Tool Successfully Hired!")
+        except:
+            messagebox.showinfo("Add Tools", "Tools Hire Failed!")
+
+
+
+class Profile():
     def __init__(self):
         self.profile_win = tk.Toplevel()
         self.profile_win.geometry("1020x680+160+10")
@@ -240,19 +318,19 @@ class Profile:
     def ProfileScreen(self):
         open_db = json.load(open("database.txt"))
 
-        Profile_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Name"])
+        Profile_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Name"], font=(15))
         Profile_Name.place(x = 150, y = 265)
 
-        Profile_UserID = Label(self.profile_win, text=open_db[LoggedIn_user][0]["UserID"])
+        Profile_UserID = Label(self.profile_win, text=open_db[LoggedIn_user][0]["UserID"], font=(15))
         Profile_UserID.place(x = 150, y = 320)
 
-        Profile_DOB = Label(self.profile_win, text=open_db[LoggedIn_user][0]["DOB"])
+        Profile_DOB = Label(self.profile_win, text=open_db[LoggedIn_user][0]["DOB"], font=(15))
         Profile_DOB.place(x = 250, y = 375)
 
-        Profile_Gender = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Gender"])
+        Profile_Gender = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Gender"], font=(15))
         Profile_Gender.place(x=150, y=430)
 
-        Profile_CNo = Label(self.profile_win, text=open_db[LoggedIn_user][0]["CNo"])
+        Profile_CNo = Label(self.profile_win, text=open_db[LoggedIn_user][0]["CNo"], font=(15))
         Profile_CNo.place(x = 300, y = 485)
 
         Add_Tool_Img = PhotoImage(file="img//AddTool.png")
@@ -275,6 +353,7 @@ class Profile:
         bg_img = PhotoImage(file="img//Add_Tool_Screen.png")
         bg_label = Label(self.Add_Tools_win, image=bg_img)
         bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+
 
         Tools_name_entry = Entry(self.Add_Tools_win)
         Tools_name_entry.config(bd=0)
@@ -305,7 +384,8 @@ class Profile:
         added_tools = [{"Name": Tools_name_entry.get(),
                         "Price": Tools_price_entry.get(),
                         "UID": LoggedIn_user,
-                        "Condition": Tools_condition_entry.get()
+                        "Condition": Tools_condition_entry.get(),
+                        "Avail": "True"
                       }]
         add_to_logged_user = open_db[LoggedIn_user][0]['Own_Tools']
 
@@ -334,9 +414,6 @@ class Profile:
         search_db[str(count_db["T"][0]["Count"])] = added_tools
         json.dump(count_db, open("count.txt", 'w'))
         json.dump(search_db, open("searchdb.txt", 'w'))
-
-
-
 
 
 
