@@ -23,17 +23,53 @@ class LoginRegister:
         self.Login_UI()
         self.window.mainloop()
 
+    def clear_widget(event):
+        if UID_Entry == UID_Entry.focus_get() and UID_Entry.get() == 'Enter Username':
+            UID_Entry.delete(0, END)
+        elif Pass_Entry == Pass_Entry.focus_get() and Pass_Entry.get() == '          ':
+            Pass_Entry.delete(0, END)
+        elif register_name == register_name.focus_get() and register_name.get() == 'Full Name':
+            register_name.delete(0, END)
+        elif register_userid == register_userid.focus_get() and register_userid.get() == 'User ID':
+            register_userid.delete(0, END)
+        elif register_password == register_password.focus_get() and register_password.get() == '          ':
+            register_password.delete(0, END)
+        elif register_DOB == register_DOB.focus_get() and register_DOB.get() == 'Date of Birth':
+            register_DOB.delete(0, END)
+        elif register_citizenshipno == register_citizenshipno.focus_get() and register_citizenshipno.get() == 'Citizenship Number':
+            register_citizenshipno.delete(0, END)
+
+    def repopulate_defaults(event):
+        if UID_Entry != UID_Entry.focus_get() and UID_Entry.get() == '':
+            UID_Entry.insert(0, 'Enter Username')
+        elif Pass_Entry != UID_Entry.focus_get() and Pass_Entry.get() == '':
+            Pass_Entry.insert(0, '          ')
+        elif register_name != register_name.focus_get() and register_name.get() == '':
+            register_name.insert(0, "Full Name")
+        elif register_userid != register_userid.focus_get() and register_userid.get() == '':
+            register_userid.insert(0, "User ID")
+        elif register_password != register_password.focus_get() and register_password.get() == '':
+            register_password.insert(0, "          ")
+        elif register_DOB != register_DOB.focus_get() and register_DOB.get() == '':
+            register_DOB.insert(0, "Date of Birth")
+        elif register_citizenshipno != register_citizenshipno.focus_get() and register_citizenshipno.get() == '':
+            register_citizenshipno.insert(0, "Citizenship Number")
+
     def Login_UI(self):
         global UID_Entry, Pass_Entry
 
         UID_Entry = Entry(self.window, font=(15))
-        UID_Entry.insert(0, "UserID")
+        UID_Entry.insert(0, "Enter Username")
         UID_Entry.config(bd=0)
+        UID_Entry.bind("<FocusIn>", LoginRegister.clear_widget)
+        UID_Entry.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         UID_Entry.place(x=370, y=347, relwidth=0.27, relheight=0.05)
 
         Pass_Entry = Entry(self.window, show="*", font=(15))
-        Pass_Entry.insert(0, "Password")
+        Pass_Entry.insert(0, "          ")
         Pass_Entry.config(bd=0)
+        Pass_Entry.bind("<FocusIn>", LoginRegister.clear_widget)
+        Pass_Entry.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         Pass_Entry.place(x=370, y=433, relwidth=0.27, relheight=0.05)
 
         Login_Button_Img = PhotoImage(file="img//login_button.png")
@@ -67,26 +103,36 @@ class LoginRegister:
         register_name = Entry(self.Register_win)
         register_name.insert(0, "Full Name")
         register_name.config(bd=0)
+        register_name.bind("<FocusIn>", LoginRegister.clear_widget)
+        register_name.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         register_name.place(x=600, y=145, relwidth=0.34, relheight=0.05)
 
         register_userid = Entry(self.Register_win)
-        register_userid.insert(0, "UserID")
+        register_userid.insert(0, "User ID")
         register_userid.config(bd=0)
+        register_userid.bind("<FocusIn>", LoginRegister.clear_widget)
+        register_userid.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         register_userid.place(x=600, y=210, relwidth=0.34, relheight=0.05)
 
         register_password = Entry(self.Register_win, show = "*")
-        register_password.insert(0, "Password")
+        register_password.insert(0, "          ")
         register_password.config(bd=0)
+        register_password.bind("<FocusIn>", LoginRegister.clear_widget)
+        register_password.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         register_password.place(x=600, y=280, relwidth=0.34, relheight=0.05)
 
         register_DOB = Entry(self.Register_win)
         register_DOB.insert(0, "Date of Birth")
         register_DOB.config(bd=0)
+        register_DOB.bind("<FocusIn>", LoginRegister.clear_widget)
+        register_DOB.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         register_DOB.place(x=600, y=350, relwidth=0.34, relheight=0.05)
 
         register_citizenshipno = Entry(self.Register_win)
-        register_citizenshipno.insert(0, "CitizenShip Number")
+        register_citizenshipno.insert(0, "Citizenship Number")
         register_citizenshipno.config(bd = 0)
+        register_citizenshipno.bind("<FocusIn>", LoginRegister.clear_widget)
+        register_citizenshipno.bind("<FocusOut>", LoginRegister.repopulate_defaults)
         register_citizenshipno.place(x=600, y=420, relwidth=0.34, relheight=0.05)
 
         Register_Button_Img = PhotoImage(file="img//register_button.png")
@@ -161,7 +207,6 @@ class LoginRegister:
                 messagebox.showinfo("Login", "The Password you entered is incorrect!")
         except KeyError:
             messagebox.showinfo("Login", "The UserID you’ve entered doesn’t match any account. Please register first! ")
-
 
 class Home:
     def __init__(self):
@@ -318,19 +363,19 @@ class Profile():
     def ProfileScreen(self):
         open_db = json.load(open("database.txt"))
 
-        Profile_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Name"], font=(15))
-        Profile_Name.place(x = 150, y = 265)
+        Profile_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Name"], font=(15), bg = "white")
+        Profile_Name.place(x = 150, y = 261.5)
 
-        Profile_UserID = Label(self.profile_win, text=open_db[LoggedIn_user][0]["UserID"], font=(15))
-        Profile_UserID.place(x = 150, y = 320)
+        Profile_UserID = Label(self.profile_win, text=open_db[LoggedIn_user][0]["UserID"], font=(15), bg = "white")
+        Profile_UserID.place(x = 150, y = 321)
 
-        Profile_DOB = Label(self.profile_win, text=open_db[LoggedIn_user][0]["DOB"], font=(15))
+        Profile_DOB = Label(self.profile_win, text=open_db[LoggedIn_user][0]["DOB"], font=(15), bg = "white")
         Profile_DOB.place(x = 250, y = 375)
 
-        Profile_Gender = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Gender"], font=(15))
+        Profile_Gender = Label(self.profile_win, text=open_db[LoggedIn_user][0]["Gender"], font=(15), bg = "white")
         Profile_Gender.place(x=150, y=430)
 
-        Profile_CNo = Label(self.profile_win, text=open_db[LoggedIn_user][0]["CNo"], font=(15))
+        Profile_CNo = Label(self.profile_win, text=open_db[LoggedIn_user][0]["CNo"], font=(15), bg = "white")
         Profile_CNo.place(x = 300, y = 485)
 
         Add_Tool_Img = PhotoImage(file="img//AddTool.png")
@@ -342,8 +387,60 @@ class Profile():
 
         Add_Tool_Button.image = Add_Tool_Img
 
-        # Added_Tool_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]['Own_Tools']["Name"])
-        # Added_Tool_Name.place(x=200, y = 100)
+        View_Added_Tool_Button = Button(self.profile_win, text = "View Your Added Tools", command = self.View_Added_Tool)
+        View_Added_Tool_Button.place(x = 655, y = 180)
+
+        View_Hired_Tool_Button = Button(self.profile_win, text = "View Your Hired Tools", command = self.View_Hired_Tool)
+        View_Hired_Tool_Button.place(x = 655, y= 500)
+
+
+    def View_Added_Tool(self):
+        self.view_addedTool_win = Tk()
+
+        open_db = json.load(open("database.txt"))
+        name = Label(self.view_addedTool_win, text="Name", font=(15), bg="red", foreground="white")
+        name.grid(row=0, column=0)
+        price = Label(self.view_addedTool_win, text="Price", font=(15), bg="blue", foreground="white")
+        price.grid(row=0, column=1)
+        Condition = Label(self.view_addedTool_win, text="Condition", font=(15), bg="green", foreground="white")
+        Condition.grid(row=0, column=2)
+        count = 1
+        for k in open_db[LoggedIn_user][0]["Own_Tools"].keys():
+            Searched_Item_Name = Label(self.view_addedTool_win, text=open_db[LoggedIn_user][0]["Own_Tools"][k][0]["Name"])
+            Searched_Item_Name.grid(row=count, column=0)
+            Searched_Item_Price = Label(self.view_addedTool_win, text=open_db[LoggedIn_user][0]["Own_Tools"][k][0]["Price"])
+            Searched_Item_Price.grid(row=count, column=1)
+            Searched_Item_Condition = Label(self.view_addedTool_win, text=open_db[LoggedIn_user][0]["Own_Tools"][k][0]["Condition"])
+            Searched_Item_Condition.grid(row=count, column=2)
+            count +=1
+
+        self.view_addedTool_win.mainloop()
+
+    def View_Hired_Tool(self):
+        self.view_hiredTool_win = Tk()
+
+        open_db = json.load(open("database.txt"))
+        name = Label(self.view_hiredTool_win, text="Name", font=(15), bg="red", foreground="white")
+        name.grid(row=0, column=0)
+        price = Label(self.view_hiredTool_win, text="Price", font=(15), bg="blue", foreground="white")
+        price.grid(row=0, column=1)
+        Condition = Label(self.view_hiredTool_win, text="Condition", font=(15), bg="green", foreground="white")
+        Condition.grid(row=0, column=2)
+        Time = Label(self.view_hiredTool_win, text="Time", font=(15), bg="Gray", foreground="white")
+        Time.grid(row=0, column=3)
+        count = 1
+        for k in open_db[LoggedIn_user][0]["Hired_Tools"].keys():
+            Searched_Item_Name = Label(self.view_hiredTool_win, text=open_db[LoggedIn_user][0]["Hired_Tools"][k][0]["Name"])
+            Searched_Item_Name.grid(row=count, column=0)
+            Searched_Item_Price = Label(self.view_hiredTool_win, text=open_db[LoggedIn_user][0]["Hired_Tools"][k][0]["Price"])
+            Searched_Item_Price.grid(row=count, column=1)
+            Searched_Item_Condition = Label(self.view_hiredTool_win, text=open_db[LoggedIn_user][0]["Hired_Tools"][k][0]["Condition"])
+            Searched_Item_Condition.grid(row=count, column=2)
+            Searched_Item_Condition = Label(self.view_hiredTool_win, text=open_db[LoggedIn_user][0]["Hired_Tools"][k][0]["Time"])
+            Searched_Item_Condition.grid(row=count, column=3)
+            count +=1
+
+        self.view_hiredTool_win.mainloop()
 
     def Add_Tools(self):
         global Tools_name_entry, Tools_price_entry, Tools_condition_entry
