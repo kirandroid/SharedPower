@@ -8,6 +8,7 @@ from tkinter import messagebox, filedialog
 import json
 import hashlib
 import ftplib
+import os
 
 class LoginRegister:
     def __init__(self):
@@ -53,7 +54,7 @@ class LoginRegister:
             register_password, \
             register_DOB, \
             register_citizenshipno, \
-            register_gender
+            register_gender, gender_value
 
         self.Register_win = tk.Toplevel()
         self.Register_win.geometry("1020x680+160+10")
@@ -96,32 +97,42 @@ class LoginRegister:
 
         Register_Button.image = Register_Button_Img
 
+        gender_value = StringVar()
+        gender_value.set(' ')
+
+        Radiobutton(self.Register_win, text="Male", variable=gender_value, value="Male", command = LoginRegister.selected_gender).place(x = 670, y = 495)
+        Radiobutton(self.Register_win, text="Female", variable=gender_value, value="Female", command = LoginRegister.selected_gender).place(x = 750, y = 495)
+
+        open_terms = Label(self.Register_win, text="terms and condition.", font=(15))
+        open_terms.place(x=800, y=555)
+        open_terms.bind('<Button-1>', LoginRegister.open_terms)
+
         self.Register_win.mainloop()
 
-        # Label(self.window, text="Gender").grid(row=5, column=2)
-        # self.register_gender = Entry(self.window)
-        # self.register_gender.grid(row=5, column=3)
-        #
-        # self.register_button = Button(self.window, text="Register", command=self.register)
-        # self.register_button.grid(row=6, column=3)
+    def open_terms(self):
+        os.startfile("Terms.txt")
+
+    @staticmethod
+    def selected_gender(event=None):
+        global gender_selected
+        gender_selected = gender_value.get()
+        print(gender_selected)
 
     @staticmethod
     def register(event):
         open_db = json.load(open("database.txt"))  # Loads the json file as dictionary
         profile = [{"Name": register_name.get(),
                     "UserID": register_userid.get(),
-                    "Pass": hashlib.sha1(register_password.get().encode()).hexdigest(),
-                    # The password from the password entry box is encoded with SHA1 in "Pass" value
+                    "Pass": hashlib.sha1(register_password.get().encode()).hexdigest(),  # The password from the password entry box is encoded with SHA1 in "Pass" value
                     "DOB": register_DOB.get(),
                     "CNo": register_citizenshipno.get(),
-                    # "Gender": register_gender.get(),
+                    "Gender": gender_selected,
                     "Own_Tools": {},
                     "Hired_Tools": {}
                     }]
         open_db[register_userid.get()] = profile  # Assigning the userid from entry box as a key
         try:
-            json.dump(open_db, open("database.txt",
-                                    'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
+            json.dump(open_db, open("database.txt", 'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
 
             connect = ftplib.FTP_TLS('files.000webhost.com', 'sharedpower', 'kiranpradhan')
             ftplib.FTP_TLS.cwd(connect, "public_html")  # changes the path to public_html
@@ -206,14 +217,14 @@ class Home:
         self.open_searchdb = json.load(open("searchdb.txt"))
         count = 0
         for k in self.open_searchdb.keys():
-            if self.open_searchdb[k][0]["Name"] == search_Entry.get():
+            if self.open_searchdb[k][0]["Name"] == search_Entry.get() or self.open_searchdb[k][0]["Name"].upper() == search_Entry.get() or self.open_searchdb[k][0]["Name"].capitalize() == search_Entry.get():
                 Searched_Item_Name.config(text=self.open_searchdb[k][0]["Name"])
                 Searched_Item_Price.config(text=self.open_searchdb[k][0]["Price"])
                 Searched_Item_Condition.config(text=self.open_searchdb[k][0]["Condition"])
                 count += 1
-                break
         else:
             messagebox.showinfo("Search", "Sorry Item not found!")
+        print(count)
 
 class Profile:
     def __init__(self):
@@ -253,8 +264,8 @@ class Profile:
 
         Add_Tool_Button.image = Add_Tool_Img
 
-        Added_Tool_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]['Own_Tools']["Name"])
-        Added_Tool_Name.place(x=200, y = 100)
+        # Added_Tool_Name = Label(self.profile_win, text=open_db[LoggedIn_user][0]['Own_Tools']["Name"])
+        # Added_Tool_Name.place(x=200, y = 100)
 
     def Add_Tools(self):
         global Tools_name_entry, Tools_price_entry, Tools_condition_entry
@@ -293,12 +304,12 @@ class Profile:
         open_db = json.load(open("database.txt"))
         added_tools = [{"Name": Tools_name_entry.get(),
                         "Price": Tools_price_entry.get(),
+                        "UID": LoggedIn_user,
                         "Condition": Tools_condition_entry.get()
                       }]
         add_to_logged_user = open_db[LoggedIn_user][0]['Own_Tools']
 
         add_to_logged_user[Tools_name_entry.get()] = added_tools
-
         try:
             json.dump(open_db, open("database.txt",'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
 
@@ -312,6 +323,17 @@ class Profile:
             messagebox.showinfo("Add Tools", "Tool Successfully Added!")
         except:
             messagebox.showinfo("Add Tools", "Tools Add Failed!")
+
+        search_db = json.load(open("searchdb.txt"))
+        count_db = json.load(open("count.txt"))
+        count_db["T"][0]["Count"] += 1
+        count_save = [{
+                        "Count" : count_db["T"][0]["Count"]
+                        }]
+        count_db["T"] = count_save
+        search_db[str(count_db["T"][0]["Count"])] = added_tools
+        json.dump(count_db, open("count.txt", 'w'))
+        json.dump(search_db, open("searchdb.txt", 'w'))
 
 
 
