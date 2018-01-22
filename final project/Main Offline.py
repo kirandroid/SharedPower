@@ -186,13 +186,6 @@ class LoginRegister:
         try:
             json.dump(open_db, open("database.txt", 'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
 
-            connect = ftplib.FTP_TLS('files.000webhost.com', 'sharedpower', 'kiranpradhan')
-            ftplib.FTP_TLS.cwd(connect, "public_html")  # changes the path to public_html
-            file_db = open("database.txt", 'rb')
-            connect.storbinary('STOR database.txt', file_db)
-            file_db.close()
-            connect.quit()
-
             messagebox.showinfo("Registration", "Registration Successful!")
         except:
             messagebox.showinfo("Registration", "Registration Failed!")
@@ -361,13 +354,6 @@ class Home:
                             }]
             open_searchdb[k] = update_tools
             json.dump(open_searchdb, open("searchdb.txt", 'w'))
-
-            connect = ftplib.FTP_TLS('files.000webhost.com', 'sharedpower', 'kiranpradhan')
-            ftplib.FTP_TLS.cwd(connect, "public_html")  # changes the path to public_html
-            file_db = open("database.txt", 'rb')
-            connect.storbinary('STOR database.txt', file_db)
-            file_db.close()
-            connect.quit()
 
             messagebox.showinfo("Hire Tools", "Tool Successfully Hired!")
         except:
@@ -574,13 +560,6 @@ class Profile():
         add_to_logged_user[Tools_name_entry.get()] = added_tools
         try:
             json.dump(open_db, open("database.txt",'w'))  # Saving the dictionary as json with "w" file method i.e, it overwrites the file
-
-            connect = ftplib.FTP_TLS('files.000webhost.com','sharedpower','kiranpradhan')
-            ftplib.FTP_TLS.cwd(connect, "public_html") #changes the path to public_html
-            file_db = open("database.txt", 'rb')
-            connect.storbinary('STOR database.txt', file_db)
-            file_db.close()
-            connect.quit()
 
             messagebox.showinfo("Add Tools", "Tool Successfully Added!")
         except:
